@@ -1,7 +1,10 @@
 import readline
 
 class MyCompleter(object):  # Custom completer
-
+    """"Borrowed from http://stackoverflow.com/questions/7821661/how-to-code-autocompletion-in-python
+    This class provides BASH style tab completion (1 tab gives match if there's a unique, 2 gives list of possible)
+    """
+    
     def __init__(self, options):
         self.options = sorted(options)
 
