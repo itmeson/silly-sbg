@@ -71,24 +71,60 @@ def readGradebook(fname):
     fData = open(fname, 'rU')
     return pickle.load(fData)
 
-def enterAttendance():
+def enterAttendance(path):
     #1. Get attendance book
+    book = open(path + 'attendance.csv', 'rU')
+    attendanceData = {}
+    for (i,line) in enumerate(book):
+	if i == 0:
+	    firstLINE = line
+	    continue
+        data = line.strip().split(',')
+	attendanceData[i] = data
+    book.close()
+
     #2. Get desired date and column
+    date = int(raw_input('Which class day do you want?'))
+    dateCol = date + 6   #attendance data starts in column 7
+
     #3. Get student yes/no
     #4. repeat 3.
+    while True:
+        name = raw_input('Name:?')
+	print "You entered: ", name
+        if name == "xx":
+	    break  
+        studentID = int(name.split(',')[0])
+ 	attendanceData[studentID][dateCol] = 1
     #5. Write attendance book
-
+    IDs = attendanceData.keys()
+    IDs.sort()
+    book = open(path + 'attendance.csv', 'w')
+    book.write(firstLINE)
+    for ID in IDs:
+        book.write(",".join(map(str, attendanceData[ID])))
+	book.write('\n')
+    book.close()
 
 import sys
 
+#1. Go to the class directory, and get the list of names:
+path = sys.argv[1]
+
 # read in the names
-namesF = sys.argv[1]
+namesF = path + "names.csv"#sys.argv[1]
 namesFile = open(namesF, 'rU')
 names = namesFile.readlines()
 names = [n.strip() for n in names]
 completer = MyCompleter(names)
 readline.set_completer(completer.complete)
 readline.parse_and_bind('tab: complete')
+
+
+#2. Choose mode:
+ #a. attendance
+enterAttendance(path)
+sys.exit()   #stop after entering attendance.  more later.
 
 AllScoreData = {}
 
