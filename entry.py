@@ -25,28 +25,59 @@ class MyCompleter(object):  # Custom completer
         except IndexError:
             return None
 
-def inputNames(standards=False):
+def inputNames(standards=False, AllScoreData = {}):
     while True:
         results = {}
-        input = raw_input("Name: ")
-        print "You entered", input
-        if input == "xx":
+        name = raw_input("Name: ")
+        print "You entered", name
+        if name == "xx":
 	    break
         elif standards:
 	    scores = raw_input(str(standards) + ' :').split(",")
 	    for i in range(len(standards)):
 		results[standards[i]] = scores[i]
-	else:
-            scores = raw_input('st:sc,  :').split(",")
-	    for s in scores:
-                pair = s.split(":")
-		results[pair[0]] = pair[1]
-	print results
+	    if len(scores) > len(standards):
+		results = standardScorePairs(scores[len(standards):], results)
+        else:
+            scores = raw_input('st:sc, ').split(",")
+	    results = standardScorePairs(scores, results)
+	saveScores(name, results, AllScoreData)
+
+def standardScorePairs(scores, results):
+    for s in scores:
+	pair = s.split(":")
+	results[pair[0]]=pair[1]
+    return results
 
 def inputStandards():
     input = raw_input('List of standards to assess for all')
     standards = input.split(',')
     return standards
+
+def saveScores(name, results, AllScoreData):
+    if name in AllScoreData:
+        AllScoreData[name].update(results)
+    else:
+	AllScoreData[name] = results
+
+def writeGradebook(fname, AllScoreData):
+    import pickle
+    fData = open(fname, 'w')
+    pickle.dump(AllScoreData, fData)
+    fData.close()
+    
+def readGradebook(fname):
+    import pickle
+    fData = open(fname, 'rU')
+    return pickle.load(fData)
+
+def enterAttendance():
+    #1. Get attendance book
+    #2. Get desired date and column
+    #3. Get student yes/no
+    #4. repeat 3.
+    #5. Write attendance book
+
 
 import sys
 
@@ -55,19 +86,22 @@ namesF = sys.argv[1]
 namesFile = open(namesF, 'rU')
 names = namesFile.readlines()
 names = [n.strip() for n in names]
-#completer = MyCompleter(["hello", "hi", "how are you", "goodbye", "great"])
 completer = MyCompleter(names)
 readline.set_completer(completer.complete)
 readline.parse_and_bind('tab: complete')
+
+AllScoreData = {}
 
 #decide what to do:
 while True:
     action = raw_input("What do you want? ((i)ndividual, (g)roup, (q)uit)")
     if action == "i":
-	inputNames()
+	AllScoreData = inputNames(AllScoreData)
+        writeGradebook("data1.txt", AllScoreData)
     elif action == "g":
-	standards = inputStandards()
-	inputNames(standards)
+	standards = inputStandards(AllScoreData)
+	AllScoreData = inputNames(standards, AllScoreData)
+        writeGradebook("data1.txt", AllScoreData)
     elif action == "q":
 	sys.exit()
 
