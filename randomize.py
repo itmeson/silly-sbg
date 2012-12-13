@@ -2,15 +2,16 @@
 
 import random, sys
 
+
+classPATH = sys.argv[1]
 whichClass = sys.argv[2]
-classFile = sys.argv[1]
 names = []
 
-classList = open(classFile, 'rU')
+classList = open(classPATH + 'names.csv', 'rU')
 for line in classList:
     studentData = line.strip().split(',')
     if studentData[-1] == whichClass:
-        names.append(studentData[:2])
+        names.append(studentData[1:3])
 
 random.shuffle(names)
 group = 0

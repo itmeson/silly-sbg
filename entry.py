@@ -72,6 +72,7 @@ def readGradebook(fname):
     return pickle.load(fData)
 
 def enterAttendance(path):
+    print path + 'hah'
     #1. Get attendance book
     book = open(path + 'attendance.csv', 'rU')
     attendanceData = {}
@@ -94,8 +95,11 @@ def enterAttendance(path):
 	print "You entered: ", name
         if name == "xx":
 	    break  
-        studentID = int(name.split(',')[0])
- 	attendanceData[studentID][dateCol] = 1
+        try:
+	    studentID = int(name.split(',')[0])
+ 	    attendanceData[studentID][dateCol] = 1
+	except:
+	    print "something was wrong with that name -- try again", sys.exc_info()
     #5. Write attendance book
     IDs = attendanceData.keys()
     IDs.sort()
@@ -105,6 +109,86 @@ def enterAttendance(path):
         book.write(",".join(map(str, attendanceData[ID])))
 	book.write('\n')
     book.close()
+
+def enterHW(path):
+    #1. Get list of assignments
+    hwLISTfile = open(path+'grade_header', 'rU')
+    hwLIST = hwLISTfile.readline().strip().split(',')
+    hwLISTfile.close()
+    hwCOLUMNS = hwLIST[9:29]   #9 and 29 are hard-coded. TODO: generalize
+    #2 Ask which one to enter
+    while True:    
+        whichHW = hwCOLUMNS[int(raw_input('Which HW? '+str(hwCOLUMNS)))]
+        print '\n\n'
+        check = raw_input(whichHW + '? 1 if correct, 0 if not')
+        if check == '1':
+            print '\n\n'
+            break
+    #3. Enter names and scores
+    homeworkFILE = open(path + 'homework.csv', 'a')
+    while True:
+        name = raw_input("Name: ")
+        print "You entered", name
+        if name == "xx":
+            break
+        score = raw_input("Score? Default is 5")
+        if score:
+            score = int(score)
+        else:
+            score = 5
+        output = name + ',' + whichHW + ',' + str(score) + '\n'
+        homeworkFILE.write(output)
+        #4. Write to the ulearn file
+
+    #n. Close the homework file
+    homeworkFILE.close()
+
+
+
+def exportToUlearn(path):
+    pass
+
+def exportToActiveGrade(path):
+    pass
+
+def enterIndividual(path):
+    pass
+
+def enterGroup(path):
+    import time
+    standards = inputStandards()
+    standardsFILE = open(path + 'standards.csv', 'a')
+    while True:
+        results = {}
+        name = raw_input("Name: ")
+        print "You entered", name
+        if name == "xx":
+	    break
+        elif standards:
+	    scores = raw_input(str(standards) + ' :').split(",")
+	    for i in range(len(standards)):
+		results[standards[i]] = scores[i]
+	    if len(scores) > len(standards):
+		results = standardScorePairs(scores[len(standards):], results)
+        else:
+            scores = raw_input('st:sc, ').split(",")
+	    results = standardScorePairs(scores, results)
+        resultsOUTPUT = []
+        for key in results.keys():
+            resultsOUTPUT.append(key + ':' + results[key])
+	timeOUT = time.strftime('%X %x')
+        standardsFILE.write(name + ',' + timeOUT + ',' + ','.join(resultsOUTPUT) + '\n')
+
+def quit(path):
+    print "Thanks for playing!"
+    sys.exit()
+
+def chooseAction(path):
+    ActionDict = {'H':enterHW, 'A':enterAttendance, 'I': enterIndividual, 'G': enterGroup, 'Q':quit}
+    while True:
+        action = raw_input('(H)omework, (A)ttendance, (I)ndividual Standards, (G)roup standards, (Q)uit')
+	ActionDict[action](path)
+
 
 import sys
 
@@ -122,6 +206,8 @@ readline.parse_and_bind('tab: complete')
 
 
 #2. Choose mode:
+chooseAction(path)
+
  #a. attendance
 enterAttendance(path)
 sys.exit()   #stop after entering attendance.  more later.
