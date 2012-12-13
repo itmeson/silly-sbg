@@ -199,7 +199,7 @@ path = sys.argv[1]
 namesF = path + "names.csv"#sys.argv[1]
 namesFile = open(namesF, 'rU')
 names = namesFile.readlines()
-names = [n.strip() for n in names]
+names = [n.strip().lower() for n in names]
 completer = MyCompleter(names)
 readline.set_completer(completer.complete)
 readline.parse_and_bind('tab: complete')
