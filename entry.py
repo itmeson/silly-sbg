@@ -49,9 +49,12 @@ def standardScorePairs(scores, results):
 	results[pair[0]]=pair[1]
     return results
 
-def inputStandards():
+def inputStandards(defaultStandards = ["AC.1"]):
     input = raw_input('List of standards to assess for all')
-    standards = input.split(',')
+    if input:
+    	standards = input.split(',')
+    else:
+	standards = defaultStandards
     return standards
 
 def saveScores(name, results, AllScoreData):
@@ -158,6 +161,7 @@ def enterGroup(path):
     import time
     standards = inputStandards()
     standardsFILE = open(path + 'standards.csv', 'a')
+    QuizID = raw_input('Enter string identifer for Quiz (Q1,Q2, etc.)')
     while True:
         results = {}
         name = raw_input("Name: ")
@@ -165,7 +169,9 @@ def enterGroup(path):
         if name == "xx":
 	    break
         elif standards:
-	    scores = raw_input(str(standards) + ' :').split(",")
+	    scoreINPUT = raw_input(str(standards) + " :")
+	    if scoreINPUT:
+                scores = scoreINPUT.split(",")
 	    for i in range(len(standards)):
 		results[standards[i]] = scores[i]
 	    if len(scores) > len(standards):
@@ -177,7 +183,7 @@ def enterGroup(path):
         for key in results.keys():
             resultsOUTPUT.append(key + ':' + results[key])
 	timeOUT = time.strftime('%X %x')
-        standardsFILE.write(name + ',' + timeOUT + ',' + ','.join(resultsOUTPUT) + '\n')
+        standardsFILE.write(name + ',' + timeOUT + ',' + QuizID + ',' + ','.join(resultsOUTPUT) + '\n')
 
 def quit(path):
     print "Thanks for playing!"
