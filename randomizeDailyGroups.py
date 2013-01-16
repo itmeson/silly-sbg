@@ -1,8 +1,13 @@
 import sys, random
 
-classPATH = sys.argv[1]
-day = int(sys.argv[3]) + 6
-whichCLASS = sys.argv[2]
+try:
+    classPATH = sys.argv[1]
+    day = int(sys.argv[3]) + 6
+    whichCLASS = sys.argv[2]
+except:
+    print "USAGE:\n\nrandomizeDailyGroups.py class section day\n\n"
+    sys.exit()
+
 
 classFILE = open(classPATH + 'attendance.csv', 'rU')
 
