@@ -162,6 +162,7 @@ def enterGroup(path):
     standards = inputStandards()
     standardsFILE = open(path + 'standards.csv', 'a')
     QuizID = raw_input('Enter string identifer for Quiz (Q1,Q2, etc.)')
+    scores = ["4"]
     while True:
         results = {}
         name = raw_input("Name: ")
@@ -169,7 +170,7 @@ def enterGroup(path):
         if name == "xx":
 	    break
         elif standards:
-	    scoreINPUT = raw_input(str(standards) + " :")
+	    scoreINPUT = raw_input(str(standards) + " :(" + str(scores) + ")")
 	    if scoreINPUT:
                 scores = scoreINPUT.split(",")
 	    for i in range(len(standards)):
