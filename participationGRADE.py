@@ -2,6 +2,7 @@ import sys
 
 path = sys.argv[1]
 days = float(sys.argv[2])
+addIN = int(sys.argv[3])
 
 attFILE = open(path, 'rU')
 
@@ -15,4 +16,4 @@ for (i, line) in enumerate(attFILE):
     for d in att:
         if d == '1':
             tot += 1
-    print name, tot/days
+    print (tot+addIN)/days, '\t', name[0], name[1] 
