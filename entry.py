@@ -89,7 +89,7 @@ def enterAttendance(path):
 
     #2. Get desired date and column
     date = int(raw_input('Which class day do you want?'))
-    dateCol = date + 6   #attendance data starts in column 7
+    dateCol = date + 5   #attendance data starts in column 7
 
     #3. Get student yes/no
     #4. repeat 3.
