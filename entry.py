@@ -162,7 +162,7 @@ def enterGroup(path):
     standards = inputStandards()
     standardsFILE = open(path + 'standards.csv', 'a')
     QuizID = raw_input('Enter string identifer for Quiz (Q1,Q2, etc.)')
-    scores = ["4"]
+    scores = ["4" for x in standards]
     while True:
         results = {}
         name = raw_input("Name: ")
@@ -181,19 +181,51 @@ def enterGroup(path):
             scores = raw_input('st:sc, ').split(",")
 	    results = standardScorePairs(scores, results)
         resultsOUTPUT = []
-        for key in results.keys():
+	resKEYS = results.keys()
+	resKEYS.sort()
+        for key in resKEYS:
             resultsOUTPUT.append(key + ':' + results[key])
 	timeOUT = time.strftime('%X %x')
         standardsFILE.write(name + ',' + timeOUT + ',' + QuizID + ',' + ','.join(resultsOUTPUT) + '\n')
+
+
+def enterFinal(path):
+    import time
+    standards = inputStandards()
+    testFORM = raw_input('Test ID?')
+    finalFILE = open(path + 'final.csv', 'a')
+    scores = ["4" for x in standards]
+    while True:
+	name = raw_input("Name: ")
+	print "You entered", name
+	if name == "xx":
+	    break
+        else:
+	    scoreINPUT = raw_input("scores: ")
+	    if scoreINPUT == "xx":
+		break
+	    elif scoreINPUT:
+		scores = scoreINPUT.split()
+            	
+
+        if len(scores) != len(standards):
+	    print "Score error with: ", name, "\n", len(scores), scores
+	    print "Enter the name and scores again"
+	    continue
+        s = sum([int(d) for d in scores])/67.0
+	print s
+	finalFILE.write(testFORM + ',' + name + ',' + ','.join(scores) + '\n')
+
+
 
 def quit(path):
     print "Thanks for playing!"
     sys.exit()
 
 def chooseAction(path):
-    ActionDict = {'H':enterHW, 'A':enterAttendance, 'I': enterIndividual, 'G': enterGroup, 'Q':quit}
+    ActionDict = {'H':enterHW, 'A':enterAttendance, 'I': enterIndividual, 'G': enterGroup, 'F':enterFinal, 'Q':quit}
     while True:
-        action = raw_input('(H)omework, (A)ttendance, (I)ndividual Standards, (G)roup standards, (Q)uit')
+        action = raw_input('(H)omework, (A)ttendance, (I)ndividual Standards, (G)roup standards, (F)inal, (Q)uit')
 	ActionDict[action](path)
 
 

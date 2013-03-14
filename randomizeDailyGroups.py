@@ -2,7 +2,7 @@ import sys, random
 
 try:
     classPATH = sys.argv[1]
-    day = int(sys.argv[3]) + 6
+    day = int(sys.argv[3]) + 5
     whichCLASS = sys.argv[2]
 except:
     print "USAGE:\n\nrandomizeDailyGroups.py class section day\n\n"
