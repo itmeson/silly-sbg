@@ -115,13 +115,13 @@ def enterAttendance(path):
 
 def enterHW(path):
     #1. Get list of assignments
-    hwLISTfile = open(path+'grade_header', 'rU')
-    hwLIST = hwLISTfile.readline().strip().split(',')
-    hwLISTfile.close()
-    hwCOLUMNS = hwLIST[9:29]   #9 and 29 are hard-coded. TODO: generalize
+    #hwLISTfile = open(path+'grade_header', 'rU')
+    #hwLIST = hwLISTfile.readline().strip().split(',')
+    #hwLISTfile.close()
+    #hwCOLUMNS = hwLIST[9:29]   #9 and 29 are hard-coded. TODO: generalize
     #2 Ask which one to enter
     while True:    
-        whichHW = hwCOLUMNS[int(raw_input('Which HW? '+str(hwCOLUMNS)))]
+        whichHW = raw_input('Which HW?') #hwCOLUMNS[int(raw_input('Which HW? '))]#+str(hwCOLUMNS)))]
         print '\n\n'
         check = raw_input(whichHW + '? 1 if correct, 0 if not')
         if check == '1':
