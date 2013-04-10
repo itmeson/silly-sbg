@@ -183,10 +183,10 @@ def enterGroup(path):
         resultsOUTPUT = []
 	resKEYS = results.keys()
 	resKEYS.sort()
-        for key in resKEYS:
-            resultsOUTPUT.append(key + ':' + results[key])
+
 	timeOUT = time.strftime('%X %x')
-        standardsFILE.write(name + ',' + timeOUT + ',' + QuizID + ',' + ','.join(resultsOUTPUT) + '\n')
+        for key in resKEYS:
+            standardsFILE.write(name + ',' + timeOUT + ',' + QuizID + ',' + key + ',' + results[key] + '\n')
 
 
 def enterFinal(path):
