@@ -13,3 +13,16 @@ multiple skills per quiz onto separate lines."""
             f2.write(nameINFO + ',' + skill + ',' + data[1] + '\n')
     f.close()
     f2.close()
+
+
+if __name__ == "__main__":
+    import sys
+    try:
+        f = sys.argv[1]
+        f2 = sys.argv[2]
+    except:
+        print "Usage: helper.py input output"
+        sys.exit()
+    separateSkillsByLine(f, f2)
+    print "Done"
+ 
